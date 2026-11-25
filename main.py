@@ -23,7 +23,25 @@ def _output_path():
     return "/output/entry.txt"
 
 
+def _validate_entry(text):
+    """Validation guard for the entry text before it is written.
+
+    The entry must be a single non-empty line between 1 and 200
+    characters; anything else is a bug, not a joke worth submitting.
+    """
+    if not isinstance(text, str):
+        raise ValueError("entry must be a string")
+    if not 1 <= len(text) <= 200:
+        raise ValueError("entry must be 1-200 characters")
+    if not text.strip():
+        raise ValueError("entry must not be only whitespace")
+    if "\n" in text or "\r" in text:
+        raise ValueError("entry must be a single line")
+    return text
+
+
 def main():
+    _validate_entry(JOKE)
     path = _output_path()
     try:
         with open(path, "w", encoding="utf-8") as handle:
